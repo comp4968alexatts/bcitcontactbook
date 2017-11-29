@@ -1,0 +1,40 @@
+{
+    "faculty" : [
+        {
+            "PutRequest": {
+                "Item" : {
+                    "name": {
+                        "S": "Albert Wei"
+                    },
+                    "phone": {
+                        "S": "604-451-7007"
+                    }
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item" : {
+                    "name": {
+                        "S": "Jason Harrison"
+                    },
+                    "phone": {
+                        "S": "604-451-7067"
+                    }
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item" : {
+                    "name": {
+                        "S": "Bill Klug"
+                    },
+                    "phone": {
+                        "S": "604-451-7148"
+                    }
+                }
+            }
+        }
+    ]
+}

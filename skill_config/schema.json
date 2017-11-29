@@ -1,0 +1,49 @@
+{
+  "intents": [
+    {
+      "slots": [
+        {
+          "name": "departmentName",
+          "type": "PUBLIC_CONTACT"
+        }
+      ],
+      "intent": "searchPublicContactIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "personName",
+          "type": "PRIVATE_CONTACT"
+        }
+      ],
+      "intent": "searchPrivateContactIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "studentId",
+          "type": "AMAZON.NUMBER"
+        }
+      ],
+      "intent": "sendVerificationCodeIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "verificationCode",
+          "type": "AMAZON.NUMBER"
+        }
+      ],
+      "intent": "getVerificationCodeIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "UnhandledIntent"
+    }
+  ]
+}

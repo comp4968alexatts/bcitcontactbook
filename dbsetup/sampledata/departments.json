@@ -1,0 +1,49 @@
+{
+    "departments": [
+        {
+            "PutRequest": {
+                "Item": {
+                    "name": {
+                        "S": "International Student Center"
+                    },
+                    "phone": {
+                        "S": "604-432-8816"
+                    },
+                    "location": {
+                        "S": "SW-01"
+                    }
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "name": {
+                        "S": "Library"
+                    },
+                    "phone": {
+                        "S": "604-432-8370"
+                    },
+                    "location": {
+                        "S": "SE-06"
+                    }
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item" : {
+                    "name": {
+                        "S": "Bookstore"
+                    },
+                    "phone": {
+                        "S": "604-432-8379"
+                    },
+                    "location": {
+                        "S": "SE-02"
+                    }
+                }
+            }
+        }
+    ]
+}

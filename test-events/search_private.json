@@ -1,0 +1,45 @@
+{
+  "session": {
+    "new": true,
+    "sessionId": "SessionId.a58e5fb8-523c-4a4f-bcbb-7f71f3a3e652",
+    "application": {
+      "applicationId": "amzn1.ask.skill.825058c4-8e69-4410-ba45-62893de5f7bc"
+    },
+    "attributes": {},
+    "user": {
+      "userId": "amzn1.ask.account.AEM2IDTTJELDBXSKFELJT4Y6DD3XMAGVFHMS5YUKKKJVV3MOZAP3XE6XLMCCD43W7FXE2BISQ6HHV4QMFNUEDBRJBFTHFBXII72EUAVNUSVUER43IFMEEFZM43FCZUEDJBYY4KT6QNFAUGN7MYQRRM5YVLVCFMBCTC2HPOMOFTAMGLNIRMIGLZ6STYKHTNH66TQRHN42VYS3ITA"
+    }
+  },
+  "request": {
+    "type": "IntentRequest",
+    "requestId": "EdwRequestId.9253a722-e511-4829-8709-2de0f5c43c47",
+    "intent": {
+      "name": "searchPrivateContactIntent",
+      "slots": {
+        "personName": {
+          "name": "personName",
+          "value": "bill klug"
+        }
+      }
+    },
+    "locale": "en-CA",
+    "timestamp": "2017-11-27T20:30:49Z"
+  },
+  "context": {
+    "AudioPlayer": {
+      "playerActivity": "IDLE"
+    },
+    "System": {
+      "application": {
+        "applicationId": "amzn1.ask.skill.825058c4-8e69-4410-ba45-62893de5f7bc"
+      },
+      "user": {
+        "userId": "amzn1.ask.account.AEM2IDTTJELDBXSKFELJT4Y6DD3XMAGVFHMS5YUKKKJVV3MOZAP3XE6XLMCCD43W7FXE2BISQ6HHV4QMFNUEDBRJBFTHFBXII72EUAVNUSVUER43IFMEEFZM43FCZUEDJBYY4KT6QNFAUGN7MYQRRM5YVLVCFMBCTC2HPOMOFTAMGLNIRMIGLZ6STYKHTNH66TQRHN42VYS3ITA"
+      },
+      "device": {
+        "supportedInterfaces": {}
+      }
+    }
+  },
+  "version": "1.0"
+}

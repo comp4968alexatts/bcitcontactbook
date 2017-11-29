@@ -1,0 +1,4 @@
+aws dynamodb delete-table --table-name departments
+aws dynamodb delete-table --table-name students
+aws dynamodb delete-table --table-name faculty
+aws dynamodb delete-table --table-name session
