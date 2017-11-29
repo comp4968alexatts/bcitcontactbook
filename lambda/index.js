@@ -95,8 +95,7 @@ function getInstructor(name) {
     return docClient.get(params)
         .promise()
         .then( data => {
-            if (Object.keys(data).length != 0)
-                return data.Item;
+            return data.Item;
         });
 } 
 
@@ -140,6 +139,17 @@ function getSessionFromDb(sessionId) {
         });
 }
 
+function deleteSessionFromDb(sessionId) {
+    var params = {
+        TableName : session_table,
+        Key : {
+            "id" : sessionId
+        }
+    };
+
+    return docClient.delete(params).promise();
+}
+
 function generateVerificationCode(sessionId) {
     var rand = '' + Math.floor(Math.random() * 1000000);
     debugLog('Generating hash...');
@@ -162,7 +172,7 @@ function generateVerificationCode(sessionId) {
 }
 
 const launchRequestHandler = function () {
-    this.emit(':ask','Welcome to bcit contact book. What are you searching for?');
+    this.emit(':ask','Welcome to B.C.I.T contact book. What are you searching for?');
 };
 
 const searchPublicContactIntentHandler = function(){
@@ -172,9 +182,9 @@ const searchPublicContactIntentHandler = function(){
     getDepartmentByName(toTitleCase(departmentName))
         .then(department => {
             var speechText = "";
-            if (department) {
+            if (Object.keys(department).length != 0) {
                 debugLog(department);
-                speechText = 'The phone of the ' + departmentName + ' is <say-as interpret-as="telephone">' + department.phone + '</say-as>'; 
+                speechText = 'The phone number of the ' + departmentName + ' is <say-as interpret-as="telephone">' + department.phone + '</say-as>'; 
             } else {
                 speechText = 'Sorry, no result is found.'; 
             }
@@ -189,24 +199,24 @@ const searchPublicContactIntentHandler = function(){
 };
 
 var searchPrivateContactIntentHandler = function() {
-    var personName = this.event.request.intent.slots.personName.value;
+    var personName = toTitleCase(this.event.request.intent.slots.personName.value);
     var sessionId = this.event.session.sessionId;
     var speechText = "";
 
     debugLog(personName);
 
-    getSessionFromDb(sessionId)
-        .then(session => {
-            if (session && session.authenticated) {
-                getInstructor(personName)
-                    .then(instructor => {
-                        if (instructor)
-                            speechText = "The number of " + personName + " is : <say-as interpret-as=\"telephone\"" + instructor.phone + "</say-as>"; 
-                        else 
-                            speechText = "Sorry, no result is found."
-                        this.response.speak(speechText).listen('What else are you searching for?');
-                        this.emit(':responseReady');
-                    });
+    getSessionFromDb(sessionId).then(session => {
+        debugLog(session);
+        if (session && session.authenticated) {
+            return getInstructor(personName)
+                .then(instructor => {
+                    if (instructor)
+                        speechText = "The phone number of " + personName + " is : <say-as interpret-as=\"telephone\"" + instructor.phone + "</say-as>"; 
+                    else 
+                        speechText = "Sorry, no result is found."
+                    this.response.speak(speechText).listen('What else are you searching for?');
+                    this.emit(':responseReady');
+                });
             }
             return session; 
         })
@@ -222,7 +232,7 @@ var searchPrivateContactIntentHandler = function() {
             return session;
         })
         .then((session)=>{
-            speechText = "Sorry, the information your are searching for needs authentication."
+            speechText = "Sorry, the information your are searching for needs authentication. Please tell me your student number."
             this.response.speak(speechText).listen('please tell me your student number to verify your identity.');
             this.emit(':responseReady');
             
@@ -255,8 +265,8 @@ var sendVerificationCodeIntentHandler = function () {
             text : code.text
         };
         return sendGmail(email);
-    }).then((emailSend)=>{
-        debugLog(emailSend);
+    }).then(sendResult => {
+        debugLog(sendResult);
         this.response
             .speak('A verifcation code has been sent to your registered email address')
             .listen('Please open your email and tell me the verification code');
@@ -270,37 +280,37 @@ var getVerificationCodeHandler = function() {
     var code = this.event.request.intent.slots.verificationCode.value;
     var sessionId = this.event.session.sessionId;
 
-    getSessionFromDb(sessionId)
-        .then(session => {
-            bcrypt.compare(code, session.verifycode)
-                .then(valid =>{
-                    var updates = {
-                        UpdateExpression : "set verifycode = :code, authenticated = :auth",
-                        ExpressionAttributeValues : {
-                            ':code' :'',
-                            ':auth' : true
-                        }
-                    };
-                    updateSession(sessionId, updates);
-                }).then(() => {
-                    this.response.speak('You have been authenticated. Try a new search now.')
-                        .listen('What are you searching for?')
-                    this.emit(':responseReady');
-                });
-            return session;
-        })
-        .then(()=>{
-            this.response.speak('Sorry, the code is ivalid.')
+    getSessionFromDb(sessionId).then(session => {
+        if (bcrypt.compareSync(code, session.verifycode)) {
+
+            var updates = {
+                UpdateExpression : "set verifycode = :code, authenticated = :auth",
+                ExpressionAttributeValues : {
+                    ':code' : 'null',
+                    ':auth' : true
+                }
+            };
+            return updateSession(sessionId, updates)
+        } else {
+            this.response.speak('Sorry, the code is ivalid. Please try again.')
                 .listen('Please check your email and tell me the verification code.')
             this.emit(':responseReady');
-        }).catch(error => {
-            debugLog(error);
-            this.emit('SessionEndedRequest');
-        }); 
+        }
+    }).then((authenticated)=>{
+        this.response.speak('You have been authenticated. Try a new search now.')
+            .listen('What are you searching for?')
+        this.emit(':responseReady');
+
+    }).catch(error=>{
+        debugLog(error);
+    });  
 };
 
 var endSessionHandler = function() {
     // do other clean up jobs
+    var sessionId = this.event.session.sessionId;
+    deleteSessionFromDb(sessionId);
+
     this.response.speak('Thanks for using bcit contact book. Bye!');
     this.emit(':responseReady');
 };
