@@ -1,0 +1,5 @@
+rm -rf lambda.zip
+npm update
+zip lambda.zip -r * -x deploy *.swp 
+aws lambda update-function-code --function-name bcitContactSearch --zip-file fileb://lambda.zip
+

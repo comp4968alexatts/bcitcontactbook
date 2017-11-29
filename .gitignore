@@ -1,0 +1,4 @@
+/lambda/node_modules/*
+/lambda/lambda.zip
+*.swp
+.*.swp

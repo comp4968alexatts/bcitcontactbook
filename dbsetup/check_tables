@@ -1,0 +1,4 @@
+aws dynamodb describe-table --table-name departments 
+aws dynamodb describe-table --table-name students 
+aws dynamodb describe-table --table-name faculty 
+aws dynamodb describe-table --table-name session 

@@ -1,0 +1,5 @@
+aws dynamodb batch-write-item --request-items file://sampledata/departments.json
+
+aws dynamodb batch-write-item --request-items file://sampledata/students.json
+
+aws dynamodb batch-write-item --request-items file://sampledata/faculty.json
