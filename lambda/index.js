@@ -232,7 +232,7 @@ var searchPrivateContactIntentHandler = function() {
             return session;
         })
         .then((session)=>{
-            speechText = "Sorry, the information your are searching for needs authentication. Please tell me your student number."
+            speechText = "Sorry, the information your are searching for requires authentication. Please tell me your student number."
             this.response.speak(speechText).listen('please tell me your student number to verify your identity.');
             this.emit(':responseReady');
             
@@ -251,7 +251,7 @@ var sendVerificationCodeIntentHandler = function () {
 
     getStudentById(studentId).then(student =>{
         if (!student) {
-            this.response.speak('Sorry, the student I.D is incorrect.').listen('Please tell me your student I.D');
+            this.response.speak('Sorry, the student I.D is incorrect. Please tell me your student I.D').listen('Please tell me your student I.D');
             this.emit(':responseReady');
         } 
         receiver = student.email;
@@ -268,8 +268,8 @@ var sendVerificationCodeIntentHandler = function () {
     }).then(sendResult => {
         debugLog(sendResult);
         this.response
-            .speak('A verifcation code has been sent to your registered email address')
-            .listen('Please open your email and tell me the verification code');
+            .speak('A verifcation code has been sent to your registered email address, Please read your email and tell me the verification code.')
+            .listen('Please tell me the verification code');
         this.emit(':responseReady');
     }).catch(error => {
         debugLog(error);
