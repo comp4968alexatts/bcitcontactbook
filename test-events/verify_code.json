@@ -1,7 +1,7 @@
 {
   "session": {
     "new": false,
-    "sessionId": "SessionId.a58e5fb8-523c-4a4f-bcbb-7f71f3a3e652",
+    "sessionId": "SessionId.577276f1-5595-4ca2-82e2-30c964a4a7fa",
     "application": {
       "applicationId": "amzn1.ask.skill.825058c4-8e69-4410-ba45-62893de5f7bc"
     },
@@ -12,18 +12,18 @@
   },
   "request": {
     "type": "IntentRequest",
-    "requestId": "EdwRequestId.7fee503c-235a-4fab-93a6-44c3d0476e23",
+    "requestId": "EdwRequestId.73efb0ca-6021-44dd-9a69-804cad7cfe48",
     "intent": {
       "name": "getVerificationCodeIntent",
       "slots": {
         "verificationCode": {
           "name": "verificationCode",
-          "value": "341734"
+          "value": "8752"
         }
       }
     },
     "locale": "en-CA",
-    "timestamp": "2017-11-29T19:36:13Z"
+    "timestamp": "2017-12-01T02:46:29Z"
   },
   "context": {
     "AudioPlayer": {

@@ -1,7 +1,7 @@
 {
   "session": {
     "new": false,
-    "sessionId": "SessionId.a58e5fb8-523c-4a4f-bcbb-7f71f3a3e652",
+    "sessionId": "SessionId.577276f1-5595-4ca2-82e2-30c964a4a7fa",
     "application": {
       "applicationId": "amzn1.ask.skill.825058c4-8e69-4410-ba45-62893de5f7bc"
     },
@@ -12,18 +12,18 @@
   },
   "request": {
     "type": "IntentRequest",
-    "requestId": "EdwRequestId.2445a85b-a4d5-48bb-9a6d-6a662011c81c",
+    "requestId": "EdwRequestId.e10bf9ee-1667-44ba-9db8-7c855eae6b83",
     "intent": {
       "name": "sendVerificationCodeIntent",
       "slots": {
         "studentId": {
           "name": "studentId",
-          "value": "1234567"
+          "value": "1111"
         }
       }
     },
     "locale": "en-CA",
-    "timestamp": "2017-11-29T06:35:00Z"
+    "timestamp": "2017-12-01T02:44:49Z"
   },
   "context": {
     "AudioPlayer": {
