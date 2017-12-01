@@ -151,7 +151,13 @@ function deleteSessionFromDb(sessionId) {
 }
 
 function generateVerificationCode(sessionId) {
-    var rand = '' + Math.floor(Math.random() * 1000000);
+    var rand;
+    while (true) {
+        rand = Math.floor(Math.random() * 10000);
+        if (rand > 1000)
+            break;
+    }
+    rand = '' + rand;
     debugLog('Generating hash...');
 
     var salt = bcrypt.genSaltSync(10);
@@ -172,12 +178,15 @@ function generateVerificationCode(sessionId) {
 }
 
 const launchRequestHandler = function () {
-    this.emit(':ask','Welcome to B.C.I.T contact book. What are you searching for?');
+    this.emit(':ask','Welcome to B.C.I.T Contacts. What are you searching for?');
 };
 
 const searchPublicContactIntentHandler = function(){
     var departmentName = this.event.request.intent.slots.departmentName.value;
     debugLog(departmentName);
+
+    if (departmentName === 'undefined' || departmentName.length === 0 )
+        this.emit('Unhandled');
 
     getDepartmentByName(toTitleCase(departmentName))
         .then(department => {
@@ -186,13 +195,14 @@ const searchPublicContactIntentHandler = function(){
                 debugLog(department);
                 speechText = 'The phone number of the ' + departmentName + ' is <say-as interpret-as="telephone">' + department.phone + '</say-as>'; 
             } else {
-                speechText = 'Sorry, no result is found.'; 
+                speechText = 'Sorry, no result is found. You can try another search'; 
             }
             this.response.speak(speechText)
-                .listen('You can try another search');
+                .listen('Do you want to search another one?');
             this.emit(':responseReady');
         })
         .catch(error => {
+            debugLog(error);
             this.emit('SessionEndedRequest');
         });
 
@@ -205,37 +215,42 @@ var searchPrivateContactIntentHandler = function() {
 
     debugLog(personName);
 
+    if (personName === 'undefined' || personName.length === 0 )
+        this.emit('Unhandled');
+
     getSessionFromDb(sessionId).then(session => {
-        debugLog(session);
         if (session && session.authenticated) {
             return getInstructor(personName)
                 .then(instructor => {
+                    debugLog(instructor);
                     if (instructor)
-                        speechText = "The phone number of " + personName + " is : <say-as interpret-as=\"telephone\"" + instructor.phone + "</say-as>"; 
+                        speechText = "The phone number of " + personName + " is : <say-as interpret-as=\"telephone\">" + instructor.phone + "</say-as>"; 
                     else 
                         speechText = "Sorry, no result is found."
                     this.response.speak(speechText).listen('What else are you searching for?');
                     this.emit(':responseReady');
+                    return true 
                 });
             }
             return session; 
         })
         .then(session => {
+            debugLog('line: 231');
+            debugLog(session);
             if (!session) {
-            session = {
+                session = {
                 id : sessionId,
                 authenticated: false,
                 verifycode: "null"
-            };
-            return createSession(session);
+                };
+                return createSession(session);
             }
             return session;
         })
         .then((session)=>{
-            speechText = "Sorry, the information your are searching for requires authentication. Please tell me your student number."
-            this.response.speak(speechText).listen('please tell me your student number to verify your identity.');
+            speechText = "Sorry, the information your are searching for requires authentication. Please tell me your student I.D."
+            this.response.speak(speechText).listen('please tell me your student I.D to verify your identity.');
             this.emit(':responseReady');
-            
         })
         .catch(error => {
             debugLog(error);
@@ -248,6 +263,9 @@ var sendVerificationCodeIntentHandler = function () {
     var sessionId = this.event.session.sessionId;
     var receiver = ''; 
     debugLog(studentId);
+
+    if (studentId === 'undefined' || studentId.length === 0 )
+        this.emit('Unhandled');
 
     getStudentById(studentId).then(student =>{
         if (!student) {
@@ -268,7 +286,7 @@ var sendVerificationCodeIntentHandler = function () {
     }).then(sendResult => {
         debugLog(sendResult);
         this.response
-            .speak('A verifcation code has been sent to your registered email address, Please read your email and tell me the verification code.')
+            .speak('A verifcation code has been sent to your registered email address, Please check your email and tell me the verification code.')
             .listen('Please tell me the verification code');
         this.emit(':responseReady');
     }).catch(error => {
@@ -278,6 +296,10 @@ var sendVerificationCodeIntentHandler = function () {
 
 var getVerificationCodeHandler = function() {
     var code = this.event.request.intent.slots.verificationCode.value;
+    debugLog(code);
+
+    if (code === 'undefined' || code.length == 0)
+        this.emit('Unhandled');
     var sessionId = this.event.session.sessionId;
 
     getSessionFromDb(sessionId).then(session => {
@@ -303,6 +325,7 @@ var getVerificationCodeHandler = function() {
 
     }).catch(error=>{
         debugLog(error);
+        this.emit('endSessionHandler');
     });  
 };
 
@@ -311,7 +334,7 @@ var endSessionHandler = function() {
     var sessionId = this.event.session.sessionId;
     deleteSessionFromDb(sessionId);
 
-    this.response.speak('Thanks for using bcit contact book. Bye!');
+    this.response.speak('Thanks for using B.C.I.T contact book. Bye!');
     this.emit(':responseReady');
 };
 
@@ -321,9 +344,13 @@ var handlers = {
     'searchPrivateContactIntent': searchPrivateContactIntentHandler,
     'sendVerificationCodeIntent' : sendVerificationCodeIntentHandler,
     'getVerificationCodeIntent' : getVerificationCodeHandler,
+    'SessionEndedRequest': endSessionHandler,
     'AMAZON.CancelIntent': endSessionHandler,
     'AMAZON.StopIntent': endSessionHandler,
-    'SessionEndedRequest': endSessionHandler,
+    'AMAZON.NoIntent': endSessionHandler,
+    'AMAZON.YesIntent': function() {
+        this.emit(':ask', 'What are you searching for?');
+    },
     'Unhandled': function () {
         debugLog('Unhandled function');
         this.emit(':ask', 'I don\'t get it! Can you say that again?', 'I don\'t get it! Can you say that again?');
@@ -337,4 +364,4 @@ exports.handler = function(event, context, callback){
     alexa.execute();
 };
 
-
+endSessionHandler

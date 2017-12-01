@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "alexa-sdk": "^1.0.21",
+    "alexa-sdk": "^1.0.22",
     "bcryptjs": "^2.4.3",
     "bluebird": "^3.5.1",
     "gmail-send": "^1.2.11"
