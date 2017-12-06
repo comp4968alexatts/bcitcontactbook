@@ -18,7 +18,13 @@ Go into the dbsetup directory, and run the scripts accordingly:
 ### Step 3: Alexa skill developer portal
 1. Create a new skill from the console. 
 2. Set up the interaction schema with 'skill_config/schema.json' and add the customized slots type in the 'file skill_config/customized_type.txt'
-3. Link the skill to the lambda function created in step 1 (use the arn) .
+3. Add sample utterances with 'skill_config/sample_utterances.txt'
+4. Link the skill to the lambda function created in step 1 (use the arn) .
 
-
+## File checklist 
+1. IntentSchema.json: skill_config/schema.json 
+2. Sample Utterance text file: skill_config/sample_utterances.txt 
+3. Custom slots types and sample data for slots: skill_config/customized_type.txt
+4. Lambda function(s) code: lambda/index.js. (Deploy the code with the 'deploy' script inside the folder, change the --function name parameter)
+5. Word document:  COMP4968 Course Project.doc
 

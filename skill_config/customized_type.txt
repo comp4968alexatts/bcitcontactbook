@@ -7,21 +7,6 @@ example value:
 
 2. PRIVATE_CONTACT
 example value:
-    Bill Clug
+    Bill Klug
     Jason Harrison
     Albert Wei
-
-3. Sample Utterances
-searchPublicContactIntent Please tell me the phone number of the {departmentName}
-searchPublicContactIntent What's the phone number of the {departmentName}
-searchPublicContactIntent What's the number of the {departmentName}
-searchPublicContactIntent What's the contact of the {departmentName}
-searchPrivateContactIntent Please tell me the phone number of {personName}
-searchPrivateContactIntent What's the number of {personName}
-searchPrivateContactIntent the phone number of {personName}
-searchPrivateContactIntent the number of {personName}
-sendVerificationCodeIntent my student I.D is A {studentId}
-sendVerificationCodeIntent my I.D is A {studentId}
-getVerificationCodeIntent the verification code is {verificationCode}
-getVerificationCodeIntent the code is {verificationCode}
-UnhandledIntent basd bsad
