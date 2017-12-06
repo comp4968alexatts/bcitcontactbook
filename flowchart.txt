@@ -1,0 +1,72 @@
+User/Echo*         AWS Alexa infrustructure      AWS Alexa                     AWS LF                      AWS DynamoDB               GMail API
+|                           |                        |                            |                              |                        |
+|----speech---------------->|                        |                            |                              |                        |
+|                           |---recognized text----->|                            |                              |                        |
+|                           |                    [Schema]                         |                              |                        |
+|                           |                        |----invoke----------------->|                              |                        |
+********************************************************************************************************************************************Case 1**
+|                           |                    [:open session]                  |                              |                        |
+|                           |                        |                            |                              |                        |
+|                           |<--greeting-------------|                            |                              |                        |
+|<----play greeting---------|                        |                            |                              |                        |
+|                           |                        |                            |                              |                        |
+********************************************************************************************************************************************Case 2**
+|                           |                    [:searchPulbicInfoIntent]        |                              |                        |
+|                           |                        |                            |                              |                        |
+|-speech: seaching content->|                        |                            |                              |                        |
+|                           |---recognized text----->|                            |                              |                        |
+|                           |                        |----invoke----------------->|                              |                        |
+|                           |                        |                            |----query ------------------->|                        |
+|                           |                        |                            |                              |                        |
+|                           |                        |                            |<---result--------------------|                        |
+|                           |                        |                            |                              |                        |
+|                           |                        |                      [:Record not found]                  |                        |
+|                           |                        |                      [:Record found]                      |                        |
+|                           |                        |<---result: not found-------|                              |                        |
+|                           |<---result text---------|                            |                              |                        |
+|<----play: not found-------|                        |                            |                              |                        |
+|                           |                        |                            |                              |                        |
+(repeat session)
+*********************************************************************************************************************************************Case 3**
+|                           |                    [:searchPrivateinfoIntent]       |                              |                        |
+|                           |                        |----invoke----------------->|                              |                        |
+|                           |                        |                      [:authenticateed ]                   |                        |
+|                           |                        |                            |----query ------------------->|                        |
+|                           |                        |                            |                              |                        |
+|                           |                        |                            |<---result--------------------|                        |
+|                           |                        |                          [: Result found]                 |                        |
+|                           |                        |                          [: Result not found]             |                        |
+|                           |                        |<---result------------------|                              |                        |
+|                           |<---result text---------|                            |                              |                        |
+|<----play: result----------|                        |                            |                              |                        |
+(repeat session)
+|                           |                        |                      [:unauthenticateed ]                 |                        |
+|                           |                        |                            |----generate & save token --->|                        |
+|                           |                        |                            |                              |                        |
+|                           |                        |                            |----send token by email-------+----------------------->|
+|                           |                        |                            |                              |                        |
+|                           |                        |<--(a) ask user for token---|                              |                        |
+|                           |<-get token (text/ssml)-|                            |                              |                        |
+|<----play: get token-------|                        |                            |                              |                        |
+|                           |                        |                            |                              |                        |
+|----speech: token--------->|                        |                            |                              |                        |
+|                           |                        |                            |                              |                        |
+|                           |---token text---------->|                            |                              |                        |
+|                           |                        |----token result----------->|                              |                        |
+|                           |                        |                            |----compare stored token----->|                        |
+|                           |                        |                            |                              |                        |
+|                           |                        |                          [: not passed: repeat (a)]       |                        |
+|                           |                        |                          [: passed: reprompt search]      |                        |
+|                           |                        |<---get search request------|                              |                        |
+|                           |<--get request (text)---|                            |                              |                        |
+|<----play: result----------|                        |                            |                              |                        |
+|                           |                        |                            |                              |                        |
+*********************************************************************************************************************************************Case 4**
+|-speech: cancel/stop ----->|                        |                            |                              |                        |
+|                           |---recognized text----->|                            |                              |                        |
+|                           |                        |----invoke----------------->|                              |                        |
+|                           |                        |                            |                              |                        |
+|                           |                        |                            |----delete session data------>|                        |
+|                           |                        |<---say Goodbye-------------|                              |                        |
+|                           |<---Goodby message------|                            |                              |                        |
+|<----play: Goodbye message-|                        |                            |                              |                        |
