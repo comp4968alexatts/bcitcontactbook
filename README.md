@@ -2,23 +2,29 @@
 
 ## Setup
 
-### AWS lambda
+### Step 1: AWS lambda
 1. Create a empty lambda function, add a "Alexa Skills Kit" trigger to the function (markdown the name of the function). 
 2. Modify lambda/deploy, set the --function-name parameter to the function name created in step 1 (!! Use "chmod" to make the scripts executable before running them !!). 
 3. Go into the lambda directory and run deploy to upload the code to the lambda function.
 4. Set environment variables for the lambda, reference to the lambda function. 
 
-### AWS dynamoDB
+### Step 2: AWS dynamoDB
 Go into the dbsetup directory, and run the scripts accordingly:
-1. Create tables:  run ./create_tables.
-2. Check tables status: run ./check_tables. Make sure all the tables in "Active" status before uploading data. 
-3. Upload sample data: run ./upload_data.
-4. Delete table: run ./delete_tables. Run this script when you finish all the testing and want to delete all the tables to save some money from AWS :) .
+1. Create tables:  run './create_tables'.
+2. Check tables status: run './check_tables'. (!!IMPORTANT!! Make sure all the tables in "Active" status before uploading data) . 
+3. Upload sample data: run './upload_data'.
+4. Delete table: run './delete_tables'. Run this script when you finish all the testing and want to delete all the tables to save some money from AWS :) .
 
-### Alexa skill developer portal
+### Step 3: Alexa skill developer portal
 1. Create a new skill from the console. 
-2. set up the interaction schema with skill_config/schema.json and add the customized slots type in the file skill_config/customized_type.txt
-3. link the skill to the lambda function created in step 1 (use the arn) .
+2. Set up the interaction schema with 'skill_config/schema.json' and add the customized slots type in the 'file skill_config/customized_type.txt'
+3. Add sample utterances with 'skill_config/sample_utterances.txt'
+4. Link the skill to the lambda function created in step 1 (use the arn) .
 
-
+## File checklist 
+1. IntentSchema.json: skill_config/schema.json 
+2. Sample Utterance text file: skill_config/sample_utterances.txt 
+3. Custom slots types and sample data for slots: skill_config/customized_type.txt
+4. Lambda function(s) code: lambda/index.js. (Deploy the code with the 'deploy' script inside the folder, change the --function name parameter)
+5. Word document: COMP4968CourseProject-AlexaContactBook.docx 
 

@@ -359,6 +359,9 @@ var handlers = {
     'AMAZON.YesIntent': function() {
         this.emit(':ask', 'What are you searching for?');
     },
+    'AMAZON.HelpIntent': function() {
+        this.emit(':ask', 'Tell me what are you searching for. For example, what\'s the number of the library? Or, What\'s the number of Professor Bill Klug?');
+    },
     'Unhandled': function () {
         debugLog('Unhandled function');
         this.emit(':ask', 'I don\'t get it! Can you say that again?', 'I don\'t get it! Can you say that again?');
